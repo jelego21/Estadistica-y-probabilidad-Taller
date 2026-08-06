@@ -1,0 +1,59 @@
+---
+title: "Practica R 1"
+author: "Jeronimo Ledesma"
+date: "2026-07-29"
+output: html_document
+---
+# Manual R
+## Manual R
+### Manual R
+
+Lo que se escriba en el fondo blanco es texto. Lo que se escriba en el fondo gris es código.
+
+Comencemos con un código básico.
+
+Para escribir un código, es decir para crear un fragmento de código, presionamos Ctrl + Alt + i.
+
+```{r}
+print ("Hola mundo")
+```
+
+Para crear una variable se utiliza el oprador de asignación "<-".
+
+```{r}
+x <- 2
+y <- 5
+z <- x*y+y-2*x
+
+print (z)
+```
+
+En R es posible redefinir las variables, por ejemplo. asignemosle a la x el valor de 25, a la y el valor de 43 y a la z el valor de x+y
+
+```{r}
+x <- 25
+y <- 43
+z <- x+y
+
+print (z)
+```
+
+para graficar se utiliza la funcion plot. para obtener una secuencia de datos se utiliza la funcion seq (secuencia)
+
+```{r}
+seq (from = 1, to = 10)
+seq (to = 10, from = 1)
+
+seq (1,10)
+seq (10,1)
+```
+
+La función seq recibe parametros (from, to) los cuales son predeterminados, en la primera linea genera una secuencia o lista from 1 to 10, luego ya que los nombres de parametros son reservados, al hacer to = 10 y from = 1 sigue generando una lista desde el 1 al 10. Al final los ultimos dos generan sin nombres de parametros ya que por predeterminado es (from, to)
+
+```{r}
+g <- seq(from = 10, to = 50, by = 0.1)
+f <- g^2
+
+plot (g, f, type = "l")
+```
+Se coloca type = "" para definir que tipo de gráfica sera, predeterminadamente es un conjunto de puntos, el type "l" es para cambiar el formato a lineal
