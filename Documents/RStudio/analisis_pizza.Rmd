@@ -1,0 +1,68 @@
+---
+title: "Pizza"
+output: html_document
+date: "2026-08-05"
+---
+
+```{r}
+library(readr)
+Pizza <- read_csv("C:/Users/jeron/Downloads/pizza_delivery.csv")
+View(Pizza)
+```
+
+`library(readr)` carga la librería `readr`, que proporciona funciones para leer archivos de datos (como CSV) de forma rápida y sencilla.
+
+`Pizza <- read_csv(...)` lee el archivo CSV ubicado en la ruta indicada y lo guarda en un objeto llamado `Pizza`, que queda disponible como un data frame (tabla) para trabajar con él. `View(Pizza)` abre una ventana para visualizar el contenido de esa tabla.
+
+```{r}
+mean(Pizza$temperature)
+```
+
+`mean()` calcula el promedio (media aritmética) de la columna `temperature`, es decir, el valor central que resulta de sumar todos los datos y dividirlos entre el número de observaciones.
+
+```{r}
+median(Pizza$temperature)
+```
+
+`median()` calcula la mediana de la columna `temperature`, es decir, el valor que queda justo en la mitad de los datos cuando están ordenados de menor a mayor.
+
+```{r}
+table(Pizza$branch)
+table(Pizza$driver)
+```
+
+`table()` cuenta cuántas veces se repite cada valor (categoría) dentro de la variable. Con esto se puede identificar la moda, es decir, la categoría que aparece con mayor frecuencia. Aquí se aplica a las sucursales (`branch`) y a los conductores (`driver`).
+
+```{r}
+prop.table(table(Pizza$driver))
+```
+
+`prop.table()` toma la tabla de frecuencias generada por `table()` y la convierte en proporciones (porcentajes en forma decimal), mostrando qué fracción del total representa cada conductor.
+
+```{r}
+tabla_conductores <- table(Pizza$driver)
+prop.table(tabla_conductores)
+```
+
+`tabla_conductores <- table(Pizza$driver)` guarda el resultado de la tabla de frecuencias de conductores en un nuevo objeto llamado `tabla_conductores`, para poder reutilizarlo más adelante sin tener que volver a escribir `table(Pizza$driver)` cada vez. Luego `prop.table()` calcula las proporciones a partir de ese objeto guardado.
+
+```{r}
+rango_temperatura <- max(Pizza$temperature) - min(Pizza$temperature)
+print(rango_temperatura)
+```
+
+El rango mide la dispersión de los datos como la diferencia entre el valor máximo (`max`) y el valor mínimo (`min`) de la temperatura. `print()` muestra el resultado en pantalla.
+
+```{r}
+var(Pizza$temperature)
+```
+
+`var()` calcula la varianza de la temperatura, una medida de dispersión que indica qué tan alejados están los datos respecto a su promedio (en unidades al cuadrado).
+
+```{r}
+sd(Pizza$temperature)
+```
+
+`sd()` calcula la desviación estándar, que es la raíz cuadrada de la varianza. Se usa más que la varianza porque queda expresada en las mismas unidades que los datos originales, facilitando su interpretación.
+
+`?var` abre la documentación de ayuda de la función `var` en R, mostrando su descripción, argumentos y ejemplos de uso.
