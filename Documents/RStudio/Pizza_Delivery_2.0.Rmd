@@ -1,0 +1,95 @@
+---
+title: "Pizza Delivery 2.0"
+author: "Jerónimo Ledesma"
+date: "2026-08-05"
+output: html_document
+---
+
+## Carga de datos
+
+Se carga la librería `readr` para poder leer archivos `.csv`, se importa el dataset de entregas de pizza y se visualiza en una nueva pestaña con `View`.
+
+```{r}
+library(readr)
+Pizza <- read_csv("C:/Users/jeron/Documents/pizza_delivery.csv")
+View(Pizza)
+```
+
+## Tabla de frecuencias del conductor
+
+Se genera una tabla de frecuencias absolutas para la variable `driver` y se imprime en consola.
+
+```{r}
+conductor <- table(Pizza$driver)
+print(conductor)
+```
+
+## Gráfico de barras (frecuencias absolutas)
+
+Se construye un gráfico de barras a partir de la tabla de frecuencias absolutas de `conductor`.
+
+```{r}
+barplot(conductor)
+```
+
+## Proporciones y gráfico de barras (frecuencias relativas)
+
+Se calculan las proporciones de cada conductor con `prop.table` y se grafican en un diagrama de barras.
+
+```{r}
+P_Conductor <- prop.table(conductor)
+barplot(P_Conductor)
+```
+
+## Histograma de la temperatura
+
+Se construye un histograma de la variable `temperature` con 100 intervalos (`breaks`), mostrando densidad en vez de frecuencia (`freq = FALSE`).
+
+```{r}
+hist(Pizza$temperature, breaks = 100, freq = FALSE)
+```
+
+## Diagrama de caja de la temperatura
+
+Se construye el diagrama de caja (boxplot) de la variable `temperature`, útil para observar la dispersión y posibles valores atípicos.
+
+```{r}
+boxplot(Pizza$temperature)
+```
+
+## Cálculo de cuartiles
+
+Se calculan el primer cuartil (C1) y el tercer cuartil (C3) de `temperature` usando la función `quantile`.
+
+```{r}
+C1 <- quantile(Pizza$temperature, 0.25)
+C3 <- quantile(Pizza$temperature, 0.75)
+```
+
+## Límites para valores atípicos (moderados y extremos)
+
+Con base en el rango intercuartílico (C3 - C1), se calculan los límites inferior y superior para valores atípicos moderados (usando 1.5 veces el rango) y extremos (usando 3 veces el rango), y se imprimen en consola.
+
+```{r}
+Ainf <- C1 - 1.5 * (C3 - C1)
+Asup <- C3 + 1.5 * (C3 - C1)
+print(Ainf)
+print(Asup)
+
+Einf <- C1 - 3 * (C3 - C1)
+Esup <- C3 + 3 * (C3 - C1)
+print(Einf)
+print(Esup)
+```
+
+## Diagrama de caja con límites marcados
+
+Se grafica nuevamente el boxplot de `temperature` y se agregan líneas horizontales con los límites calculados: en rojo los límites moderados (Ainf, Asup) y en verde los límites extremos (Einf, Esup).
+
+```{r}
+boxplot(Pizza$temperature)
+abline(h = Ainf, col = "red")
+abline(h = Asup, col = "red")
+abline(h = Einf, col = "green")
+abline(h = Esup, col = "green")
+```
