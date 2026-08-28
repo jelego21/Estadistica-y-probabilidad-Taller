@@ -1,0 +1,52 @@
+---
+title: "Clase_4"
+author: "Jerónimo Ledesma"
+date: "2026-08-26"
+output: html_document
+---
+
+## Funciones de distribuciones en R
+
+En R, el prefijo de la función indica qué tipo de cálculo se está haciendo sobre una distribución:
+
+- **d**: densidad / distribución puntual`P(X = x)`
+- **p**: probabilidad acumulada (función de distribución acumulada, CDF)`P(X ≤ x)`
+- **q**: quantil 
+
+Para la distribución binomial, `dbinom(x, size, prob)` calcula la probabilidad puntual de obtener exactamente `x` éxitos en `size` ensayos, con probabilidad de éxito `prob`.
+
+```{r}
+dbinom(5, 75, 0.02)
+dbinom(3, 4, 0.05)
+```
+
+## Probabilidad de menos de 1500 muertes
+
+La probabilidad de que una persona con cierta enfermedad muera es del 10%. Se prueba un nuevo medicamento en 20000 enfermos. Se quiere estimar la probabilidad de que mueran menos de 1500.
+
+Como `pbinom(x, size, prob)` calcula directamente `P(X ≤ x)`, este caso se resuelve con una sola llamada:
+
+```{r}
+pbinom(1500, 20000, 0.1)
+```
+
+## Probabilidad de un rango (entre 1900 y 2100)
+
+Ahora se quiere la probabilidad de que mueran más de 1900 y menos de 2100 personas, es decir `P(1900 < X < 2100)`.
+
+Esto se obtiene restando dos acumuladas: la acumulada hasta 2100 menos la acumulada hasta 1900, de forma que solo queda la "franja" entre ambos valores.
+
+```{r}
+pbinom(2100, 20000, 0.1) - pbinom(1900, 20000, 0.1)
+```
+
+## Probabilidad de más de 2010 muertes: P(X > 2010)
+
+`pbinom` **siempre** calcula `P(X ≤ x)`, nunca `P(X > x)` directamente. No existe un argumento o variante de `pbinom` que invierta la desigualdad por sí sola.
+
+Por eso, para "mayor que" hay que usar el **complemento**: como la probabilidad total es 1, todo lo que no es `P(X ≤ 2010)` es necesariamente `P(X > 2010)`. Es decir:
+
+de forma que:
+```{r}
+1 - pbinom(2010, 20000, 0.1)
+```
