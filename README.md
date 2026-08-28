@@ -13,4 +13,7 @@ Primer análisis exploratorio sobre el dataset `pizza_delivery.csv`. Incluye car
 ### `Pizza_Delivery_2_0.Rmd`
 Segunda versión del análisis del dataset `pizza_delivery.csv`, reorganizada en secciones: cada bloque de código agrupa 1 o 2 funciones afines, con la explicación como texto en Markdown antes del bloque. Incluye tabla y gráficos de frecuencia del conductor, histograma y boxplot de `temperature`, cálculo de cuartiles, y detección de valores atípicos moderados y extremos mediante el rango intercuartílico.
 
+### `Experimento.Rmd`
+Práctica sobre distribuciones de probabilidad discretas. Cubre la diferencia entre los prefijos d, p y q en R (densidad puntual, acumulada y quantil respectivamente) y el uso de dbinom y pbinom sobre la distribución binomial. Incluye ejercicios de probabilidad acumulada, probabilidad de un rango mediante resta de acumuladas, y el cálculo del complemento para resolver probabilidades del tipo "mayor que".
+
 - Cada semana se añade un nuevo `.Rmd` con la práctica o análisis correspondiente.
