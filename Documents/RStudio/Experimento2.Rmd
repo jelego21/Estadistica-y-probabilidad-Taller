@@ -1,0 +1,138 @@
+---
+title: "Experimento2"
+author: "Jerónimo Ledesma"
+date: "2026-09-09"
+output: html_document
+---
+
+## Introducción
+
+En este documento se resuelven varios ejercicios de probabilidad relacionados con las distribuciones **Binomial**, la **aproximación Normal a la Binomial** y la distribución de **Poisson**. Para cada ejercicio se explica qué representa cada función de R utilizada y por qué se aplica de esa manera.
+
+Notación general que se usa a lo largo del documento:
+
+- n: número de ensayos (repeticiones del experimento).
+- p: probabilidad de éxito en un solo ensayo.
+- X: variable aleatoria que cuenta la cantidad de éxitos.
+- n*p: valor esperado (media) de una variable Binomial, es decir, la cantidad de éxitos que se esperan en promedio.
+
+## Ejercicio 1: Distribución Binomial exacta
+
+Se tiene un experimento con n = 500 ensayos y probabilidad de éxito p = 0.03. Se calculan dos probabilidades:
+
+- `dbinom(8, 500, 0.03)`: calcula P(X = 8), es decir, la probabilidad **puntual** de obtener exactamente 8 éxitos (dbinom = "density binomial", la función de masa de probabilidad).
+- `pbinom(10, 500, 0.03)`: calcula P(X <= 10), la probabilidad **acumulada** de obtener 10 o menos éxitos (pbinom = "probability binomial", la función de distribución acumulada).
+
+Ambas se multiplican por 100 para expresar el resultado como porcentaje.
+
+```{r}
+# P(X = 8) con X ~ Binomial(n = 500, p = 0.03), expresado en porcentaje
+dbinom(8, 500, 0.03) * 100
+
+# P(X <= 10) con X ~ Binomial(n = 500, p = 0.03), expresado en porcentaje
+pbinom(10, 500, 0.03) * 100
+```
+
+## Ejercicio 2: Aproximación Normal a la Binomial
+
+Cuando n es grande y p no es muy cercano a 0 ni a 1 (una regla común es que n*p >= 5 y n*(1-p) >= 5), es razonable aproximar una Binomial mediante una distribución **Normal** con la misma media y varianza.
+
+Aquí se tiene n = 100 y p = 0.1, y se quiere calcular P(7 <= X <= 13). Esta probabilidad se puede obtener de forma exacta calculando por separado P(X <= 13) y P(X <= 6) y restando (ya que P(7 <= X <= 13) = P(X <= 13) - P(X <= 6)):
+
+```{r}
+# P(7 <= X <= 13) = P(X <= 13) - P(X <= 6), con X ~ Binomial(n = 100, p = 0.1)
+pbinom(13, 100, 0.1) * 100 - pbinom(6, 100, 0.1) * 100
+```
+
+### Valor esperado
+
+El valor esperado (media) de una Binomial se calcula como E(X) = n * p. Representa la cantidad de éxitos que se esperan en promedio:
+
+```{r}
+# E(X) = n * p
+100 * 0.1
+```
+
+### Varianza
+
+La varianza de una Binomial se calcula como Var(X) = n * p * (1 - p). Esta parte estaba vacía en el documento original; aquí se completa:
+
+```{r}
+# Var(X) = n * p * (1 - p)
+100 * 0.1 * (1 - 0.1)
+```
+
+Con esto, la desviación estándar es sqrt(Var(X)) = sqrt(9) = 3, que es el valor que se usa más abajo como tercer argumento de `pnorm`.
+
+### Corrección por continuidad
+
+Como la Binomial es una distribución **discreta** y la Normal es **continua**, al aproximar se aplica la **corrección por continuidad**: se suma y resta 0.5 a los límites del intervalo para que el área bajo la curva Normal se ajuste mejor a la probabilidad discreta que se busca aproximar. Así, P(7 <= X <= 13) se aproxima con P(6.5 <= Y <= 13.5), usando Y ~ Normal(media = 10, desviación estándar = 3):
+
+```{r}
+# Aproximación normal de P(7 <= X <= 13) usando corrección por continuidad
+# media = n*p = 10, desviación estándar = sqrt(n*p*(1-p)) = 3
+pnorm(13.5, 10, 3) - pnorm(6.5, 10, 3)
+```
+
+Se puede comparar este resultado con el calculado de forma exacta en el Ejercicio 2 para ver qué tan buena es la aproximación.
+
+## Ejercicio 3: Binomial con n = 2000, p = 0.14
+
+Se quiere calcular P(X <= 270) para X ~ Binomial(n = 2000, p = 0.14). Se muestran dos formas de obtener el mismo resultado.
+
+**Forma 1: sumando manualmente con un ciclo `for`.** Se recorre cada valor posible de i entre 0 y 270, se calcula P(X = i) con `dbinom` y se van acumulando en la variable `probabilidad`. Al final, `probabilidad` contiene P(X <= 270):
+
+```{r}
+n <- 2000
+p <- 0.14
+probabilidad <- 0
+for (i in seq(0, 270)) {
+  probabilidad <- probabilidad + dbinom(i, n, p)
+}
+# Resultado en porcentaje
+print(probabilidad * 100)
+```
+
+**Forma 2: usando directamente `pbinom`.** Como `pbinom(k, n, p)` ya calcula P(X <= k) de forma acumulada, no es necesario sumar manualmente con un ciclo; el resultado debe coincidir con el de la Forma 1:
+
+```{r}
+n <- 2000
+p <- 0.14
+# Repetimos el cálculo manual (en proporción, sin multiplicar por 100) para comparar
+probabilidad <- 0
+for (i in seq(0, 270)) {
+  probabilidad <- probabilidad + dbinom(i, n, p)
+}
+print(probabilidad)
+
+# Comparación con el cálculo directo usando pbinom
+pbinom(270, 2000, 0.14)
+```
+
+Ambos métodos deben dar el mismo valor (salvo diferencias mínimas de redondeo), ya que `pbinom` es matemáticamente equivalente a sumar todos los `dbinom` desde 0 hasta el valor buscado.
+
+## Ejercicio 4: Distribución de Poisson
+
+La distribución de Poisson se usa para modelar la cantidad de eventos que ocurren en un intervalo (de tiempo, espacio, etc.), cuando se conoce la tasa promedio de ocurrencia lambda. Aquí se calculan tres tipos de probabilidades para X ~ Poisson(lambda = 96):
+
+- `dpois(100, 96)`: P(X = 100), probabilidad puntual de que ocurran exactamente 100 eventos.
+- `ppois(100, 96)`: P(X <= 100), probabilidad acumulada de que ocurran 100 eventos o menos.
+- `1 - ppois(100, 96)`: P(X > 100), el complemento de la acumulada, es decir, la probabilidad de que ocurran más de 100 eventos.
+
+```{r}
+# P(X = 100), con X ~ Poisson(lambda = 96)
+dpois(100, 96) * 100
+
+# P(X <= 100), con X ~ Poisson(lambda = 96)
+ppois(100, 96) * 100
+
+# P(X > 100) = 1 - P(X <= 100), con X ~ Poisson(lambda = 96)
+(1 - ppois(100, 96)) * 100
+```
+
+Por último, se calcula P(X = 0) para X ~ Poisson(lambda = 4), es decir, la probabilidad de que **no ocurra ningún evento** cuando la tasa promedio es de 4 eventos por intervalo:
+
+```{r}
+# P(X = 0), con X ~ Poisson(lambda = 4)
+dpois(0, 4) * 100
+```
