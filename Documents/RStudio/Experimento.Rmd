@@ -45,8 +45,7 @@ pbinom(2100, 20000, 0.1) - pbinom(1900, 20000, 0.1)
 
 `pbinom` **siempre** calcula `P(X ≤ x)`, nunca `P(X > x)` directamente. No existe un argumento o variante de `pbinom` que invierta la desigualdad por sí sola.
 
-Por eso, para "mayor que" hay que usar el **complemento**: como la probabilidad total es 1, todo lo que no es `P(X ≤ 2010)` es necesariamente `P(X > 2010)`. Es decir:
-
+Por eso, para "mayor que" hay que usar el **complemento**: como la probabilidad total es 1, todo lo que no es `P(X ≤ 2010)` es necesariamente `P(X > 2010)`. (si quisieramos P(X>=2010), se tendria que hacer 1-pbinom(2009,...))Es decir:
 de forma que:
 ```{r}
 1 - pbinom(2010, 20000, 0.1)
