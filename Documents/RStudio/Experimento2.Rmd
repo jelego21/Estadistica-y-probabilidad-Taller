@@ -16,6 +16,10 @@ Notación general que se usa a lo largo del documento:
 - X: variable aleatoria que cuenta la cantidad de éxitos.
 - n*p: valor esperado (media) de una variable Binomial, es decir, la cantidad de éxitos que se esperan en promedio.
 
+- Media: n*p
+- Varianza: n*p*(1-p)
+- Desviación estandar: raiz cuadrada de la varianza
+
 ## Ejercicio 1: Distribución Binomial exacta
 
 Se tiene un experimento con n = 500 ensayos y probabilidad de éxito p = 0.03. Se calculan dos probabilidades:
@@ -66,7 +70,7 @@ Con esto, la desviación estándar es sqrt(Var(X)) = sqrt(9) = 3, que es el valo
 
 ### Corrección por continuidad
 
-Como la Binomial es una distribución **discreta** y la Normal es **continua**, al aproximar se aplica la **corrección por continuidad**: se suma y resta 0.5 a los límites del intervalo para que el área bajo la curva Normal se ajuste mejor a la probabilidad discreta que se busca aproximar. Así, P(7 <= X <= 13) se aproxima con P(6.5 <= Y <= 13.5), usando Y ~ Normal(media = 10, desviación estándar = 3):
+Como la Binomial es una distribución **discreta** y la Normal es **continua**, al aproximar se aplica la **corrección por continuidad**: se suma y resta 0.5 a los límites del intervalo para que el área bajo la curva Normal se ajuste mejor a la probabilidad discreta que se busca aproximar (ya que si no se "ajusta" el area debajo de un punto va a ser 0). Así, P(7 <= X <= 13) se aproxima con P(6.5 <= Y <= 13.5), usando Y ~ Normal(media = 10, desviación estándar = 3):
 
 ```{r}
 # Aproximación normal de P(7 <= X <= 13) usando corrección por continuidad
@@ -113,7 +117,7 @@ Ambos métodos deben dar el mismo valor (salvo diferencias mínimas de redondeo)
 
 ## Ejercicio 4: Distribución de Poisson
 
-La distribución de Poisson se usa para modelar la cantidad de eventos que ocurren en un intervalo (de tiempo, espacio, etc.), cuando se conoce la tasa promedio de ocurrencia lambda. Aquí se calculan tres tipos de probabilidades para X ~ Poisson(lambda = 96):
+La distribución de Poisson se usa para modelar la cantidad de eventos que ocurren en un intervalo (de tiempo, espacio, etc.), cuando se conoce la tasa promedio de ocurrencia lambda. Aquí se calculan tres tipos de probabilidades para X ~ Poisson(lambda = 96): (solo se usa cuando tenemos una tasa promedio lambda sin un n explicito)
 
 - `dpois(100, 96)`: P(X = 100), probabilidad puntual de que ocurran exactamente 100 eventos.
 - `ppois(100, 96)`: P(X <= 100), probabilidad acumulada de que ocurran 100 eventos o menos.
