@@ -9,11 +9,11 @@ output: html_document
 
 En R, el prefijo de la función indica qué tipo de cálculo se está haciendo sobre una distribución:
 
-- **d**: densidad / distribución puntual`P(X = x)`
-- **p**: probabilidad acumulada (función de distribución acumulada, CDF)`P(X ≤ x)`
-- **q**: quantil 
+- **d**: densidad / distribución puntual`P(X = x)` ¿Qué tan probable es este valor?
+- **p**: probabilidad acumulada (función de distribución acumulada, CDF)`P(X ≤ x)` ¿Qué probabilidad hay de esto o menos?
+- **q**: quantil ¿Qué valor deja tal probabilidad acumulada?
 
-Para la distribución binomial, `dbinom(x, size, prob)` calcula la probabilidad puntual de obtener exactamente `x` éxitos en `size` ensayos, con probabilidad de éxito `prob`.
+Para la distribución binomial, `dbinom(x, size, prob)` calcula la probabilidad puntual de obtener exactamente `x` éxitos en `size` ensayos, con probabilidad de éxito `prob`. (es un caso en especifico, cada uno con la misma probablidad p de exito)
 
 ```{r}
 dbinom(5, 75, 0.02)
@@ -25,6 +25,7 @@ dbinom(3, 4, 0.05)
 La probabilidad de que una persona con cierta enfermedad muera es del 10%. Se prueba un nuevo medicamento en 20000 enfermos. Se quiere estimar la probabilidad de que mueran menos de 1500.
 
 Como `pbinom(x, size, prob)` calcula directamente `P(X ≤ x)`, este caso se resuelve con una sola llamada:
+(suma de todos los casos o area acumulada)
 
 ```{r}
 pbinom(1500, 20000, 0.1)
@@ -34,7 +35,7 @@ pbinom(1500, 20000, 0.1)
 
 Ahora se quiere la probabilidad de que mueran más de 1900 y menos de 2100 personas, es decir `P(1900 < X < 2100)`.
 
-Esto se obtiene restando dos acumuladas: la acumulada hasta 2100 menos la acumulada hasta 1900, de forma que solo queda la "franja" entre ambos valores.
+Esto se obtiene restando dos acumuladas: la acumulada hasta 2100 menos la acumulada hasta 1900, de forma que solo queda la "franja" entre ambos valores.(el código realmente hace P(1901 <= X <= 2100))
 
 ```{r}
 pbinom(2100, 20000, 0.1) - pbinom(1900, 20000, 0.1)
